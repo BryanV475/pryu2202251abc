@@ -52,16 +52,14 @@ def saveIncompleteRows(data_to_walk):
     return pd.DataFrame(data)
 
 def splitXY(data, y_label_name):
-    
-    print(data)
-    
-    x_data = data.drop([str(y_label_name)], axis=1)
+    #print("datos: \n",data)
+    x_data = data.drop([y_label_name], axis=1 )
     y_data = pd.DataFrame(data[y_label_name])
     return x_data, y_data
 
 def splitUtilIncompleteData(complete_data, y_label_name):
     c_data = saveUtilRows(complete_data)
-    print(c_data)
+    print(c_data)    
     x_c_data, y_c_data = splitXY(c_data, y_label_name)
     i_data = saveIncompleteRows(complete_data)
     x_i_data, y_i_data = splitXY(i_data, y_label_name)
@@ -69,20 +67,23 @@ def splitUtilIncompleteData(complete_data, y_label_name):
 
 
 data = pd.read_csv('./pagos.csv')
-
+#print(data)
 
 # x_complete_data, y_complete_data, x_incomplete_data, y_incomplete_data
-x_c_data, y_c_data, x_i_data, y_i_data = splitUtilIncompleteData(data, 'Mes')
+x_c_data, y_c_data, x_i_data, y_i_data = splitUtilIncompleteData(data, "Saldo")
 
+df = saveUtilRows(data)
+df.plot(kind='scatter', y='Saldo', x='Mes', color='red')
+
+plt.plot(x_c_data, y_c_data, 'o')
 
 lrM = LinearRegression()
 lrM.fit(x_c_data, y_c_data)
 prediccion = lrM.predict(x_c_data)
-prediccion
+print(prediccion)
 plt.plot(x_c_data, prediccion)
 plt.plot(x_c_data, y_c_data, 'o')
 plt.xlabel('Mes')
 plt.ylabel('Saldo')
 plt.title('Prediccion 1 - sin limpieza')
-
 plt.show()
