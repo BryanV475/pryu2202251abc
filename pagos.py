@@ -1,5 +1,6 @@
 import pandas as pd
 import matplotlib.pyplot as plt
+import numpy as np
 from sklearn.linear_model import LinearRegression
 
 def searchNull(data):
@@ -51,11 +52,9 @@ def saveIncompleteRows(data_to_walk):
         data.append(item)
     return pd.DataFrame(data)
 
-def splitXY(data, y_label_name):
-    
+def splitXY(data, y_label_name):    
     print(data)
-    
-    x_data = data.drop([str(y_label_name)], axis=1)
+    x_data = data.drop([y_label_name], axis=1)
     y_data = pd.DataFrame(data[y_label_name])
     return x_data, y_data
 
@@ -72,7 +71,7 @@ data = pd.read_csv('./pagos.csv')
 
 
 # x_complete_data, y_complete_data, x_incomplete_data, y_incomplete_data
-x_c_data, y_c_data, x_i_data, y_i_data = splitUtilIncompleteData(data, 'Mes')
+x_c_data, y_c_data, x_i_data, y_i_data = splitUtilIncompleteData(data, 'Saldo')
 
 
 lrM = LinearRegression()
@@ -83,6 +82,7 @@ plt.plot(x_c_data, prediccion)
 plt.plot(x_c_data, y_c_data, 'o')
 plt.xlabel('Mes')
 plt.ylabel('Saldo')
+plt.xticks(np.arange(0, 20, step=1))
 plt.title('Prediccion 1 - sin limpieza')
 
 plt.show()
