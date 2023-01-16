@@ -65,25 +65,33 @@ def splitUtilIncompleteData(complete_data, y_label_name):
     x_i_data, y_i_data = splitXY(i_data, y_label_name)
     return x_c_data, y_c_data, x_i_data, y_i_data
 
-
 data = pd.read_csv('./pagos.csv')
-#print(data)
 
 # x_complete_data, y_complete_data, x_incomplete_data, y_incomplete_data
 x_c_data, y_c_data, x_i_data, y_i_data = splitUtilIncompleteData(data, "Saldo")
 
 df = saveUtilRows(data)
-df.plot(kind='scatter', y='Saldo', x='Mes', color='red')
+fig, axes = plt.subplots(nrows=1, ncols=3)
 
-plt.plot(x_c_data, y_c_data, 'o')
+df.plot(ax=axes[0], kind='scatter', y='Saldo', x='Mes', color='red')
 
 lrM = LinearRegression()
 lrM.fit(x_c_data, y_c_data)
 prediccion = lrM.predict(x_c_data)
-print(prediccion)
+
+plt.subplot(1,3,2)
+plt.title('Prediccion 1 - sin limpieza')
+plt.xlabel('Mes');
+plt.ylabel('Saldo');
 plt.plot(x_c_data, prediccion)
 plt.plot(x_c_data, y_c_data, 'o')
-plt.xlabel('Mes')
-plt.ylabel('Saldo')
-plt.title('Prediccion 1 - sin limpieza')
+
+plt.subplot(1,3,3)
+plt.title('Prediccion 2 - con Limpieza')
+plt.plot(x_c_data, prediccion,'go')
+plt.xlabel('Mes');
+plt.ylabel('Saldo');
+plt.plot(x_c_data, prediccion)
+#plt.xlabel('Mes')
+#plt.ylabel('Saldo')
 plt.show()
