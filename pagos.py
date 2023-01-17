@@ -92,7 +92,6 @@ def splitUtilIncompleteData(complete_data, y_label_name):
     i_data = saveIncompleteRows(complete_data)
     x_i_data, y_i_data = splitXY(i_data, y_label_name)
     x_c_data, y_c_data = removeNegatives(x_c_data, y_c_data)
-    y_c_data = normalizeData(y_c_data)
     print(y_c_data)
     return x_c_data, y_c_data, x_i_data, y_i_data
 
@@ -127,7 +126,7 @@ x, y = cleanByError(x_c_data, pd.DataFrame(prediccion), y_c_data)
 
 lrMc = LinearRegression()
 lrMc.fit(x, y)
-prediccionClean = lrM.predict(x_c_data)
+prediccionClean = lrM.predict(x)
 
 plt.subplot(1,3,2)
 

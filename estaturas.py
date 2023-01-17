@@ -130,7 +130,7 @@ x, y = cleanByError(x_c_data, pd.DataFrame(prediccion), y_c_data)
 
 lrMc = LinearRegression()
 lrMc.fit(x, y)
-prediccionClean = lrM.predict(x_c_data)
+prediccionClean = lrM.predict(x)
 
 plt.subplot(1,3,2)
 
