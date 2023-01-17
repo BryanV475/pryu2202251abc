@@ -68,15 +68,6 @@ def saveIncompleteRows(data_to_walk):
         data.append(item)
     return pd.DataFrame(data)
 
-def normalizeData(data):
-    for column in data:
-        # Se calcula el valor mínimo y máximo de la columna actual
-        min_val = min(data[column])
-        max_val = max(data[column])
-        
-        # Se recorre cada valor de la columna actual y se aplica la fórmula de normalización
-        data[column] = [(val - min_val) / (max_val - min_val) for val in data[column]]
-    return data
 
 def splitXY(data, y_label_name):
     #print("datos: \n",data)
@@ -91,9 +82,10 @@ def splitUtilIncompleteData(complete_data, y_label_name):
     x_c_data, y_c_data = splitXY(c_data, y_label_name)
     i_data = saveIncompleteRows(complete_data)
     x_i_data, y_i_data = splitXY(i_data, y_label_name)
-    x_c_data, y_c_data = removeNegatives(x_c_data, y_c_data)
+    
     print(y_c_data)
     return x_c_data, y_c_data, x_i_data, y_i_data
+
 
 def cleanByError(data_total, data_predicted, data_expected):
     cpy_total = data_total.copy()
@@ -122,7 +114,8 @@ lrM = LinearRegression()
 lrM.fit(x_c_data, y_c_data)
 prediccion = lrM.predict(x_c_data)
 
-x, y = cleanByError(x_c_data, pd.DataFrame(prediccion), y_c_data)
+x_cc_data, y_cc_data = removeNegatives(x_c_data, y_c_data)
+x, y = cleanByError(x_cc_data, pd.DataFrame(prediccion), y_cc_data)
 
 lrMc = LinearRegression()
 lrMc.fit(x, y)
@@ -143,6 +136,7 @@ plt.title('Prediccion 2 - con Limpieza')
 plt.xlabel('Mes')
 plt.ylabel('Saldo')
 plt.plot(x, prediccionClean)
-plt.plot(x, prediccionClean,'go')
+plt.plot(x, prediccionClean, 'go')
+plt.plot(x, y, 'ro')
 
 plt.show()
