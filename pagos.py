@@ -96,6 +96,19 @@ def splitUtilIncompleteData(complete_data, y_label_name):
     print(y_c_data)
     return x_c_data, y_c_data, x_i_data, y_i_data
 
+def cleanByError(data_total, data_predicted, data_expected):
+    cpy_total = data_total.copy()
+    cpy_expected = data_expected.copy()
+    c = 0 # contador para recorrer los arreglos (de 0 a n) // no indices
+    for i, l in data_total.iterrows():
+        error = 100 * (abs(data_expected.iloc[c][0] - data_predicted.iloc[c][0]) / data_expected.iloc[c][0])
+      
+        if(error>100):  
+            cpy_total = cpy_total.drop(i) #  eliminamos los elementos en la posicion i que me generan ruido
+            cpy_expected = cpy_expected.drop(i)
+        c += 1
+    return cpy_total, cpy_expected
+
 data = pd.read_csv('./pagos.csv')
 
 # x_complete_data, y_complete_data, x_incomplete_data, y_incomplete_data
@@ -110,17 +123,27 @@ lrM = LinearRegression()
 lrM.fit(x_c_data, y_c_data)
 prediccion = lrM.predict(x_c_data)
 
+x, y = cleanByError(x_c_data, pd.DataFrame(prediccion), y_c_data)
+
+lrMc = LinearRegression()
+lrMc.fit(x, y)
+prediccionClean = lrM.predict(x_c_data)
+
 plt.subplot(1,3,2)
+
 plt.title('Prediccion 1 - sin limpieza')
-plt.xlabel('Mes');
-plt.ylabel('Saldo');
+plt.xlabel('Mes')
+plt.ylabel('Saldo')
 plt.plot(x_c_data, prediccion)
 plt.plot(x_c_data, y_c_data, 'o')
 
 plt.subplot(1,3,3)
+
 plt.title('Prediccion 2 - con Limpieza')
-plt.plot(x_c_data, prediccion,'go')
-plt.xlabel('Mes');
-plt.ylabel('Saldo');
-plt.plot(x_c_data, prediccion)
+
+plt.xlabel('Mes')
+plt.ylabel('Saldo')
+plt.plot(x, prediccionClean)
+plt.plot(x, prediccionClean,'go')
+
 plt.show()
