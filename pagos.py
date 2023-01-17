@@ -123,6 +123,4 @@ plt.plot(x_c_data, prediccion,'go')
 plt.xlabel('Mes');
 plt.ylabel('Saldo');
 plt.plot(x_c_data, prediccion)
-#plt.xlabel('Mes')
-#plt.ylabel('Saldo')
 plt.show()
