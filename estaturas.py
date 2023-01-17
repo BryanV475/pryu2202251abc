@@ -152,4 +152,19 @@ plt.plot(x, prediccionClean)
 plt.plot(x, prediccionClean, 'go')
 plt.plot(x, y, 'ro')
 
+vals_x = []
+vals_y = []
+vals_yC = []
+
+for xi in x.values:
+    vals_x.append(xi[0])
+for yi in y.values:
+    vals_y.append(yi[0])
+for yci in prediccionClean:
+    vals_yC.append(yci[0])
+
+
+for xi,yi,yci in zip(vals_x,vals_y,vals_yC):
+    plt.plot([xi, xi], [yi, yci], 'k-')
+
 plt.show()
